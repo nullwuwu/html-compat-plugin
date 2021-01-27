@@ -1,8 +1,10 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import bundler from './bundler'
+import insert from './insert'
 
 interface CompatHtmlPluginConfig {
   outputName: string
-  files: string[]
+  input: string
 }
 
 class CompatHtmlPlugin {
@@ -16,11 +18,16 @@ class CompatHtmlPlugin {
     compiler.hooks.compilation.tap('CompatHtmlPlugin', compilation => {
       HtmlWebpackPlugin.getHooks(compilation).afterTemplateExecution.tap(
         'CompatHtmlPlugin',
-        data => {
-          const { outputName } = this.config
+        async data => {
+          const { outputName, input } = this.config
 
           if (data.outputName === outputName) {
             // TODO compile files add insert to html
+            const codes = await bundler({
+              input
+            })
+
+            insert(data.html, { string: codes.join() })
           }
 
           return data
