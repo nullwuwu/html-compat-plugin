@@ -1,7 +1,7 @@
 import rollup from 'rollup'
 import { getBabelOutputPlugin, babel } from "@rollup/plugin-babel";
 import commonjs from '@rollup/plugin-commonjs';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import nodeResolve from '@rollup/plugin-node-resolve';
 
 const defaultInputOptions = {
   plugins: [

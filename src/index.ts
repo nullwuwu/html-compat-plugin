@@ -16,9 +16,9 @@ class CompatHtmlPlugin {
 
   apply(compiler) {
     compiler.hooks.compilation.tap('CompatHtmlPlugin', compilation => {
-      HtmlWebpackPlugin.getHooks(compilation).afterTemplateExecution.tap(
-        'CompatHtmlPlugin',
-        async data => {
+      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapPromise(
+        'CompatHtmlPlugin', 
+        async (data) => {
           const { outputName, input } = this.config
 
           if (data.outputName === outputName) {
@@ -26,6 +26,8 @@ class CompatHtmlPlugin {
             const codes = await bundler({
               input
             })
+
+            console.log(codes)
 
             insert(data.html, { string: codes.join() })
           }
